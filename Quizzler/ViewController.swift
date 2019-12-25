@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var scoreLabel: UILabel!
     @IBOutlet var progressBar: UIView!
     @IBOutlet weak var progressLabel: UILabel!
+    @IBOutlet weak var progressWidthConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,7 @@ class ViewController: UIViewController {
         
     }
 
+    
 
     @IBAction func answerPressed(_ sender: AnyObject) {
         if sender.tag == 1{
@@ -48,13 +50,17 @@ class ViewController: UIViewController {
     }
     
     
+    
     func updateUI() {
         scoreLabel.text = "Score: \(score)"
         progressLabel.text = "\(questionNumber + 1) /13"
-        progressBar.frame.size.width = (view.frame.size.width / 13 ) * CGFloat(questionNumber + 1)
+        var value = self.view.frame.width
+        value = (value / 13 ) * CGFloat(questionNumber + 1)
+        progressWidthConstraint.constant = CGFloat(value)
     }
     
 
+    
     func nextQuestion() {
         
         if questionNumber <= 12{
@@ -74,6 +80,7 @@ class ViewController: UIViewController {
     }
     
     
+    
     func checkAnswer() {
         let correctAnswer = allQuestions.list[questionNumber].answer
         
@@ -87,12 +94,11 @@ class ViewController: UIViewController {
     }
     
     
+    
     func startOver() {
         score = 0
         questionNumber = 0
         nextQuestion()
     }
-    
-
     
 }
