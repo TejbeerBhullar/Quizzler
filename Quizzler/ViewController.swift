@@ -11,9 +11,10 @@ import UIKit
 class ViewController: UIViewController {
     
     //Place your instance variables here
-    let allQuestions = QuestionBank()       // will create instance of question bank class that has all the questions
+    let allQuestions = QuestionBank()
     var pickedAnswer : Bool = false
     var questionNumber : Int = 0  // State as to which question is the user on
+    var score : Int = 0
     
     
     
@@ -25,8 +26,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let firstQuestion = allQuestions.list[0] // will give the first question (class: Question) from the list of the QuestionBank class
-        questionLabel.text = firstQuestion.questionText  // this will display the question of the object firstQuestion to the lable questionLabel
+        nextQuestion()
         
     }
 
@@ -49,16 +49,20 @@ class ViewController: UIViewController {
     
     
     func updateUI() {
-      
+        scoreLabel.text = "Score: \(score)"
+        progressLabel.text = "\(questionNumber + 1) /13"
+        progressBar.frame.size.width = (view.frame.size.width / 13 ) * CGFloat(questionNumber + 1)
     }
     
 
     func nextQuestion() {
         
         if questionNumber <= 12{
-            questionLabel.text = allQuestions.list[questionNumber].questionText}
+            questionLabel.text = allQuestions.list[questionNumber].questionText
+            updateUI()
+        }
         else {
-            let alert = UIAlertController(title: "Awesome", message: "Do you want to start again", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Awesome", message: "Would you like to start again", preferredStyle: .alert)
             
             let restartAction = UIAlertAction(title: "Restart", style: .default, handler:
             {(UIAlertAction) in self.startOver()
@@ -72,15 +76,19 @@ class ViewController: UIViewController {
     
     func checkAnswer() {
         let correctAnswer = allQuestions.list[questionNumber].answer
+        
         if pickedAnswer == correctAnswer{
             print("You have got it")
-        }else{
+            score += 1
+        }
+        else{
             print("sorry, it's wrong")
         }
     }
     
     
     func startOver() {
+        score = 0
         questionNumber = 0
         nextQuestion()
     }
